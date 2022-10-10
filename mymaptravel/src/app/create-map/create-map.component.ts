@@ -36,7 +36,7 @@ export class CreateMapComponent implements OnInit {
       style: 'mapbox://styles/ademski/cl8wyrlke005415n2wa35vuzd', // style URL
       center: [-74.5, 40], // starting position [lng, lat]
       zoom: 9, // starting zoom
-      accessToken: 'pk.eyJ1IjoiYWRlbXNraSIsImEiOiJjbDh2dm9mcXQwaTIwM3dvZzg5Z2prOTR1In0.Qu7PXmqyvJtBvcRILBUZdw'
+      accessToken: ''
   });
 
   map.on('style.load', () => {
