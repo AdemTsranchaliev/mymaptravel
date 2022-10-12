@@ -28,14 +28,15 @@
               "src/assets/lib"
 
             ],
-            "styles": [
+            "styles": [               
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/assets/lib/bootstrap/dist/css/bootstrap.min.css",
               "src/assets/lib/animate.css/animate.css",
               "src/assets/lib/components-font-awesome/css/font-awesome.min.css",
               "src/assets/lib/et-line-font/et-line-font.css",
               "src/assets/lib/flexslider/flexslider.css",
-              "src/assets/lib/owl.carousel/dist//assets/owl.carousel.min.css",
-              "src/assets/lib/owl.carousel/dist//assets/owl.theme.default.min.css",
+              "src/assets/lib/owl.carousel/dist/assets/owl.carousel.min.css",
+              "src/assets/lib/owl.carousel/dist/assets/owl.theme.default.min.css",
               "src/assets/lib/magnific-popup/dist/magnific-popup.css",
               "src/assets/lib/simple-text-rotator/simpletextrotator.css",
               "src/assets/css/style.css",
@@ -43,8 +44,8 @@
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css"
             ],
             "scripts": [
-              "src/assets/lib/jquery/dist/jquery.js",
-              "src/assets/lib/bootstrap/dist/js/bootstrap.min.js",
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
               "src/assets/lib/wow/dist/wow.js",
               "src/assets/lib/jquery.mb.ytplayer/dist/jquery.mb.YTPlayer.js",
               "src/assets/lib/isotope/dist/isotope.pkgd.js",
@@ -55,7 +56,9 @@
               "src/assets/lib/magnific-popup/dist/jquery.magnific-popup.js",
               "src/assets/lib/simple-text-rotator/jquery.simple-text-rotator.min.js",
               "src/assets/js/plugins.js",
-              "src/assets/js/main.js"
+              "src/assets/js/main.js",
+              "src/styles.css"
+
             ]
           },
           "configurations": {

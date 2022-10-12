@@ -1,0 +1,20 @@
+#map {
+    height: 100%;
+    width: 100%;
+}
+
+#map-container {
+    height: 100vh;
+    width: auto;
+}
+
+.geocoder {
+    z-index: 1001;
+}
+.mapboxgl-ctrl-geocoder:first-child {
+    z-index: 1022;
+  }
+
+.mapboxgl-ctrl-geocoder--input{
+    background-color: red !important;
+}
