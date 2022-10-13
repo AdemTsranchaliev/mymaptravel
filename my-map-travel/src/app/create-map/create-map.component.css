@@ -18,3 +18,12 @@
 .mapboxgl-ctrl-geocoder--input{
     background-color: red !important;
 }
+.phone_view_horizontal_map{
+    height: 20rem;
+}
+.big_screen_view_horizontal_map{
+    height: 50rem;
+}
+.big_screen_view_vertical_map{
+    height: 65rem;
+}

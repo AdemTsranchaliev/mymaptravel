@@ -4,6 +4,7 @@ import { timer } from 'rxjs';
 import { MapService } from 'src/app/shared/map.service';
 import { v4 as uuidv4 } from 'uuid';
 import { MapModel } from '../map.model';
+import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 
 @Component({
   selector: 'app-choose-location-plane',

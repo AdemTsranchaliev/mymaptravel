@@ -1,5 +1,5 @@
 {
-  "name": "mymaptravel",
+  "name": "my-map-travel",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -7,11 +7,6 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
-  },
-  "browser": {
-    "fs": false,
-    "path": false,
-    "os": false
   },
   "private": true,
   "dependencies": {
@@ -25,16 +20,13 @@
     "@angular/platform-browser": "~12.2.0",
     "@angular/platform-browser-dynamic": "~12.2.0",
     "@angular/router": "~12.2.0",
-    "@mapbox/mapbox-gl-directions": "^4.1.0",
     "@mapbox/mapbox-gl-geocoder": "^5.0.1",
-    "@types/mapbox__mapbox-gl-geocoder": "^4.7.3",
     "bootstrap": "^4.5.0",
     "jquery": "^3.5.1",
     "mapbox-gl": "^2.10.0",
     "popper.js": "^1.14.3",
     "rxjs": "~6.6.0",
     "tslib": "^2.3.0",
-    "uuid": "^9.0.0",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
@@ -42,7 +34,6 @@
     "@angular/cli": "~12.2.14",
     "@angular/compiler-cli": "~12.2.0",
     "@types/jasmine": "~3.8.0",
-    "@types/mapbox-gl": "^2.7.6",
     "@types/node": "^12.20.55",
     "jasmine-core": "~3.8.0",
     "karma": "~6.3.0",

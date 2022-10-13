@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MapModel } from '../map.model';
 import { Map } from 'mapbox-gl';
 import { MapService } from 'src/app/shared/map.service';
+import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 
 @Component({
   selector: 'app-choose-view',

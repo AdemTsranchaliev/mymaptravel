@@ -58,25 +58,7 @@
           </mat-step>
           <mat-step [stepControl]="secondFormGroup" label="Избери рамка">
             <div class="container-fluid">
-              <h4 class="font-alt pb-0 mb-0">Изберете подравняване</h4><br />
-              <hr>
-              <div class="row">
-
-                <div class="col-sm-12">
-                  <div class="card col-sm-3 ml-3">
-                    <img class="card-img-top  pt-3" src="assets/images/map-design-1.png" alt="Card image cap">
-                    <h5 class="text-center">Card title</h5>
-                  </div>
-                  <div class="card col-sm-3 ml-3">
-                    <img class="card-img-top  pt-3" src="assets/images/map-design-1.png" alt="Card image cap">
-                    <h5 class="text-center">Card title</h5>
-                  </div>
-                  <div class="card col-sm-3 ml-3">
-                    <img class="card-img-top  pt-3" src="assets/images/map-design-1.png" alt="Card image cap">
-                    <h5 class="text-center">Card title</h5>
-                  </div>
-                </div>
-              </div>
+              <app-choose-align (changeMapAlignEvent)='changeMapAlign($event)'></app-choose-align>
               <h4 class="font-alt pb-0 mb-0">Изберете дизайн на картата</h4><br />
               <hr>
               <div class="row">
@@ -130,8 +112,11 @@
     <div class="col-sm-8 d-flex justify-content-center p-5" style="background-color: #f0eeee;">
       <div class="container-fluid">
         <div class="row justify-content-center">
-          <div class="col-sm-7 border rounded w-100 px-0 mt-5"
-            style='box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;height: 65rem;'>
+          <div class=" border rounded w-100 px-0 mt-5" [ngClass]="{
+            'phone_view_horizontal_map': (align==1 && innerWidth < 550),
+            'big_screen_view_horizontal_map': (align==1 && innerWidth > 550)
+          }"
+            style='box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;'>
             <div id="map"></div>
           </div>
         </div>

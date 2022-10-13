@@ -16,6 +16,7 @@ import { ChooseLocationCarComponent } from './create-map/choose-location-car/cho
 import { ChooseViewComponent } from './create-map/choose-view/choose-view.component';
 import { MapService } from './shared/map.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { ChooseAlignComponent } from './create-map/choose-align/choose-align.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
     ChooseLocationPlaneComponent,
     ChooseLocationCarComponent,
     ChooseViewComponent,
+    ChooseAlignComponent,
     
   ],
   imports: [

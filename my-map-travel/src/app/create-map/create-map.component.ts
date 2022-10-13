@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { StepperOrientation } from '@angular/material/stepper';
-import { Observable } from 'rxjs';
+import { Observable, timer } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as mapboxgl from 'mapbox-gl';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
@@ -21,6 +21,13 @@ export class CreateMapComponent implements OnInit {
   public map: mapboxgl.Map;
   public startSelected: any;
   public endSelected: any;
+  public innerWidth: number;
+  public align: number = 1;
+  @HostListener('window:resize', ['$event']) onResize(event) {
+    console.log(window.innerWidth);
+    this.innerWidth = window.innerWidth;
+  }
+
   // public startPoint: MapboxGeocoder;
   // public endPoint: MapboxGeocoder;
 
@@ -47,21 +54,19 @@ export class CreateMapComponent implements OnInit {
   }
   ngOnInit(): void {
     this.map = this.mapService.initializeMap();
-    // this.startPoint = this.mapService.getGeocoder('startPoint');
-    // this.endPoint = this.mapService.getGeocoder('endPoint');
+    this.innerWidth = window.innerWidth;
 
     this.map.on('style.load', () => {
-      this.map.setFog({}); // Set the default atmosphere style
+      this.map.setFog({});
       this.map.resize();
     });
-    // this.map.on('load', () => {
-   
-    //   document
-    //     .getElementById('startPoint')!
-    //     .replaceWith(this.startPoint.onAdd(this.map));
-    //   document
-    //     .getElementById('endPoint')!
-    //     .replaceWith(this.endPoint.onAdd(this.map));
-    // });
+ 
+  }
+
+  public changeMapAlign(align: number) {
+    this.align = align;
+    timer(10).subscribe(x=>{
+      this.map.resize();
+    });
   }
 }

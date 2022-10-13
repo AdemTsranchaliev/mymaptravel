@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "mymaptravel": {
+    "my-map-travel": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:application": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/mymaptravel",
+            "outputPath": "dist/my-map-travel",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -66,8 +66,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "2mb",
+                  "maximumError": "2mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -98,10 +98,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "mymaptravel:build:production"
+              "browserTarget": "my-map-travel:build:production"
             },
             "development": {
-              "browserTarget": "mymaptravel:build:development"
+              "browserTarget": "my-map-travel:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -109,7 +109,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "mymaptravel:build"
+            "browserTarget": "my-map-travel:build"
           }
         },
         "test": {
@@ -133,5 +133,5 @@
       }
     }
   },
-  "defaultProject": "mymaptravel"
+  "defaultProject": "my-map-travel"
 }
