@@ -25,7 +25,7 @@
                       </ul>
                       <div class="tab-content">
                         <div class="tab-pane active" id="support">
-                          <app-choose-location-plane [map]='map' [startPoint]='startPoint' [endPoint]='endPoint'></app-choose-location-plane>
+                          <app-choose-location-plane [map]='map'></app-choose-location-plane>
                         </div>
                         <div class="tab-pane" id="sales">
                           <!-- <div class="row">
@@ -44,33 +44,10 @@
                               </div>
                             </div>
                           </div> -->
-
-                          <div class="row">
-                            <div class="col-sm-2 col-sm-offset-5">
-                              <div class="large-text align-center"><a class="section-scroll" href="#services"><i
-                                    class="fa fa-plus-circle"></i></a></div>
-                            </div>
-                          </div>
+                          <app-choose-location-car [map]='map'></app-choose-location-car>
                         </div>
                         <div class="tab-pane" id="map-view">
-                          <div class="row" style="height: 500px;">
-                            <div class="col-sm-12">
-                              <div class="row">
-
-                                <label m-5>Изберете локация</label>
-                              </div>
-                              <!-- <div class="row w-50">
-                                <div class="col-sm-5">
-                                  <div id="startPoint" class="geocoder w-25"></div>
-                                </div>
-                                <div class="col-sm-5">
-
-                                  <div id="endPoint" class="geocoder col-sm-5"></div>
-                                </div>
-
-                              </div> -->
-                            </div>
-                          </div>
+                          <app-choose-view [map]='map'></app-choose-view>
                         </div>
                       </div>
                     </div>

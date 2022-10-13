@@ -10,6 +10,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import { MapService } from '../shared/map.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-create-map',
@@ -20,8 +21,9 @@ export class CreateMapComponent implements OnInit {
   public map: mapboxgl.Map;
   public startSelected: any;
   public endSelected: any;
-  public startPoint: MapboxGeocoder;
-  public endPoint: MapboxGeocoder;
+  // public startPoint: MapboxGeocoder;
+  // public endPoint: MapboxGeocoder;
+
   firstFormGroup = this._formBuilder.group({
     firstCtrl: ['', Validators.required],
   });
@@ -36,7 +38,8 @@ export class CreateMapComponent implements OnInit {
   constructor(
     private _formBuilder: FormBuilder,
     breakpointObserver: BreakpointObserver,
-    private mapService: MapService
+    private mapService: MapService,
+    private http: HttpClient
   ) {
     this.stepperOrientation = breakpointObserver
       .observe('(min-width: 800px)')
@@ -44,51 +47,21 @@ export class CreateMapComponent implements OnInit {
   }
   ngOnInit(): void {
     this.map = this.mapService.initializeMap();
-    this.startPoint = this.mapService.getGeocoder('startPoint');
-    this.endPoint = this.mapService.getGeocoder('endPoint');
+    // this.startPoint = this.mapService.getGeocoder('startPoint');
+    // this.endPoint = this.mapService.getGeocoder('endPoint');
 
     this.map.on('style.load', () => {
       this.map.setFog({}); // Set the default atmosphere style
       this.map.resize();
     });
-    this.map.on('load', () => {
-
-
-      
-      
-      // this.map.addSource('route', {
-      //   type: 'geojson',
-      //   data: {
-      //     type: 'Feature',
-      //     properties: {},
-      //     geometry: {
-      //       type: 'LineString',
-      //       coordinates: [
-      //         [23.319941, 42.698334],
-      //         [28.97953, 41.015137],
-      //       ],
-      //     },
-      //   },
-      // });
-      // this.map.addLayer({
-      //   id: 'route',
-      //   type: 'line',
-      //   source: 'route',
-      //   layout: {
-      //     'line-join': 'round',
-      //     'line-cap': 'round',
-      //   },
-      //   paint: {
-      //     'line-color': '#888',
-      //     'line-width': 8,
-      //   },
-      // });
-      document
-        .getElementById('startPoint')!
-        .replaceWith(this.startPoint.onAdd(this.map));
-      document
-        .getElementById('endPoint')!
-        .replaceWith(this.endPoint.onAdd(this.map));
-    });
+    // this.map.on('load', () => {
+   
+    //   document
+    //     .getElementById('startPoint')!
+    //     .replaceWith(this.startPoint.onAdd(this.map));
+    //   document
+    //     .getElementById('endPoint')!
+    //     .replaceWith(this.endPoint.onAdd(this.map));
+    // });
   }
 }

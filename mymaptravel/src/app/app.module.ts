@@ -15,6 +15,7 @@ import { ChooseLocationPlaneComponent } from './create-map/choose-location-plane
 import { ChooseLocationCarComponent } from './create-map/choose-location-car/choose-location-car.component';
 import { ChooseViewComponent } from './create-map/choose-view/choose-view.component';
 import { MapService } from './shared/map.service';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -35,8 +36,8 @@ import { MapService } from './shared/map.service';
     FormsModule,
     ReactiveFormsModule,
     MatFormFieldModule,
-    MatSlideToggleModule
-
+    MatSlideToggleModule,
+    HttpClientModule
   ],
   providers: [MapService],
   bootstrap: [AppComponent]
