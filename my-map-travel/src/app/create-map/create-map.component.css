@@ -11,19 +11,27 @@
 .geocoder {
     z-index: 1001;
 }
+
 .mapboxgl-ctrl-geocoder:first-child {
     z-index: 1022;
-  }
+}
 
-.mapboxgl-ctrl-geocoder--input{
+.mapboxgl-ctrl-geocoder--input {
     background-color: red !important;
 }
-.phone_view_horizontal_map{
-    height: 20rem;
+
+.phone_view_horizontal_map {
+    height: 25rem;
 }
-.big_screen_view_horizontal_map{
+
+.big_screen_view_horizontal_map {
     height: 50rem;
 }
-.big_screen_view_vertical_map{
-    height: 65rem;
+
+.phone_view_vertical_map {
+    height: 55rem !important;
+}
+
+.big_screen_view_vertical_map {
+    height: 65rem !important;
 }

@@ -26,8 +26,8 @@ export class MapService {
       zoom: zoom ? zoom : 1,
       accessToken: this.env.MAPBOX_PUBLIC_KEY,
       projection: {
-        name:'mercator'
-      }
+        name: 'mercator',
+      },
     });
   }
 
@@ -48,6 +48,8 @@ export class MapService {
   }
 
   public addDirections(map: mapboxgl.Map, coordinates: any[]) {
+    let id = 'LineString';
+
     let geojson: any = {
       type: 'FeatureCollection',
       features: [
@@ -61,26 +63,32 @@ export class MapService {
         },
       ],
     };
-    map.addSource('LineString', {
-      type: 'geojson',
-      data: geojson,
-    });
-    map.addLayer({
-      id: 'LineString',
-      type: 'line',
-      source: 'LineString',
-      layout: {
-        'line-join': 'round',
-        'line-cap': 'round',
-      },
-      paint: {
-        'line-color': '#BF93E4',
-        'line-width': 5,
-      },
-    });
+    if (map.getSource(id)) {
+      map.getSource(id).setData(geojson);
+    } else {
+      map.addSource('LineString', {
+        type: 'geojson',
+        data: geojson,
+      });
+      map.addLayer({
+        id: 'LineString',
+        type: 'line',
+        source: 'LineString',
+        layout: {
+          'line-join': 'round',
+          'line-cap': 'round',
+        },
+        paint: {
+          'line-color': '#BF93E4',
+          'line-width': 5,
+        },
+      });
+    }
 
     timer(10).subscribe(() => {
-      map.fitBounds([coordinates[0], coordinates[coordinates.length-1]], { padding: 160 });
+      map.fitBounds([coordinates[0], coordinates[coordinates.length - 1]], {
+        padding: 160,
+      });
     });
   }
 
@@ -90,6 +98,12 @@ export class MapService {
     endCoordinates: any
   ) {
     let id = 'route';
+    if (map.getLayer(id)) {
+      map.removeLayer(id);
+    }
+    if (map.getSource(id)) {
+      map.removeSource(id);
+    }
 
     map.addSource(id, {
       type: 'geojson',

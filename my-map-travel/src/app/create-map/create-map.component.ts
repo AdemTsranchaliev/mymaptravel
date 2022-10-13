@@ -8,9 +8,9 @@ import * as mapboxgl from 'mapbox-gl';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import { MapService } from '../shared/map.service';
 import { HttpClient } from '@angular/common/http';
+declare var $:any;
 
 @Component({
   selector: 'app-create-map',
@@ -24,7 +24,6 @@ export class CreateMapComponent implements OnInit {
   public innerWidth: number;
   public align: number = 1;
   @HostListener('window:resize', ['$event']) onResize(event) {
-    console.log(window.innerWidth);
     this.innerWidth = window.innerWidth;
   }
 
@@ -52,6 +51,7 @@ export class CreateMapComponent implements OnInit {
       .observe('(min-width: 800px)')
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
   }
+
   ngOnInit(): void {
     this.map = this.mapService.initializeMap();
     this.innerWidth = window.innerWidth;
@@ -60,13 +60,28 @@ export class CreateMapComponent implements OnInit {
       this.map.setFog({});
       this.map.resize();
     });
- 
   }
 
   public changeMapAlign(align: number) {
     this.align = align;
-    timer(10).subscribe(x=>{
+    timer(10).subscribe((x) => {
       this.map.resize();
     });
+  }
+
+  public changeVisualizationType() {
+    let ids = ['route', 'LineString'];
+
+    ids.forEach((x) => {
+      if (this.map.getLayer(x)) {
+        this.map.removeLayer(x);
+      }
+      if (this.map.getSource(x)) {
+        this.map.removeSource(x);
+      }
+    });
+
+    $('#changeTab').modal('hide');
+
   }
 }

@@ -14,13 +14,15 @@ export class ChooseLocationCarComponent implements OnInit {
   startPoint: MapboxGeocoder;
   endPoint: MapboxGeocoder;
 
-  public startSelected: any;
-  public endSelected: any;
+  public startSelected: any = null;
+  public endSelected: any = null;
+
   constructor(private mapService: MapService) {}
 
   ngOnInit(): void {
     this.startPoint = this.mapService.getGeocoder('startPoint');
     this.endPoint = this.mapService.getGeocoder('endPoint');
+
     this.map.on('load', () => {
       document
         .getElementById('startPoint')!
@@ -29,13 +31,20 @@ export class ChooseLocationCarComponent implements OnInit {
         .getElementById('endPoint')!
         .replaceWith(this.endPoint.onAdd(this.map));
     });
+
     this.startPoint.on('result', (results) => {
       this.startSelected = results?.result;
+      this.generateDirections();
     });
 
     this.endPoint.on('result', (results) => {
       this.endSelected = results?.result;
+      this.generateDirections();
+    });
+  }
 
+  public generateDirections() {
+    if (this.startSelected && this.endSelected) {
       this.mapService
         .getDirections(
           this.startSelected.geometry.coordinates[0],
@@ -44,7 +53,6 @@ export class ChooseLocationCarComponent implements OnInit {
           this.endSelected.geometry.coordinates[1]
         )
         .subscribe((x: any) => {
-          console.log(this.map);
           timer(10).subscribe(() => {
             this.mapService.addDirections(
               this.map,
@@ -52,6 +60,6 @@ export class ChooseLocationCarComponent implements OnInit {
             );
           });
         });
-    });
+    }
   }
 }

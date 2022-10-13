@@ -22,6 +22,7 @@ export class ChooseViewComponent implements OnInit {
     this.viewPoint = this.mapService.getGeocoder('viewPoint');
 
     this.map.on('load', () => {
+      
       document
         .getElementById('viewPoint')!
         .replaceWith(this.viewPoint.onAdd(this.map));

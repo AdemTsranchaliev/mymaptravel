@@ -7,6 +7,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 })
 export class ChooseAlignComponent implements OnInit {
 
+  public alignId: number = 1;
   @Output() changeMapAlignEvent: EventEmitter<number> = new EventEmitter<number>();
   constructor() { }
 
@@ -14,8 +15,9 @@ export class ChooseAlignComponent implements OnInit {
   }
 
   public changeMapAlign(alignId:number){
-    console.log(alignId);
+    this.alignId=alignId;
     this.changeMapAlignEvent.emit(alignId);
+    
   }
 
 }

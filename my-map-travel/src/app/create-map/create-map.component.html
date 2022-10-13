@@ -15,35 +15,20 @@
                     <hr class="divider-w">
                     <div role="tabpanel">
                       <ul class="nav nav-tabs font-alt pt-20" role="tablist">
-                        <li class="active"><a href="#support" data-toggle="tab"> <i
-                              class="fa fa-plane fa-lg"></i>Пътуване
+                        <li class="active"><a href="#support" data-toggle="tab" data-toggle="modal"
+                            data-target="#changeTab"> <i class="fa fa-plane fa-lg"></i>Пътуване
                             със самолет</a></li>
-                        <li><a href="#sales" data-toggle="tab"> <i class="fa fa-car fa-lg"></i>Пътуване с кола</a>
+                        <li data-toggle="modal" data-target="#changeTab"><a href="#sales" data-toggle="tab"> <i
+                              class="fa fa-car fa-lg"></i>Пътуване с кола</a>
                         </li>
-                        <li><a href="#map-view" data-toggle="tab"> <span class="icon-map fa-lg"
-                              aria-hidden="true"></span>Изглед</a></li>
+                        <li data-toggle="modal" data-target="#changeTab"><a href="#map-view" data-toggle="tab"> <span
+                              class="icon-map fa-lg" aria-hidden="true"></span>Изглед</a></li>
                       </ul>
                       <div class="tab-content">
                         <div class="tab-pane active" id="support">
                           <app-choose-location-plane [map]='map'></app-choose-location-plane>
                         </div>
                         <div class="tab-pane" id="sales">
-                          <!-- <div class="row">
-                            <div class="col-sm-6">
-                              <div class="form-group">
-                                <label for="from-plane">От</label>
-                                <div id="endPoint" class="geocoder col-sm-5" style="min-width: 300px !important;"></div>
-
-                              </div>
-                            </div>
-                            <div class="col-sm-6">
-                              <div class="form-group">
-                                <label for="name">До</label>
-                                <div id="startPoint" class="geocoder col-sm-5"></div>
-
-                              </div>
-                            </div>
-                          </div> -->
                           <app-choose-location-car [map]='map'></app-choose-location-car>
                         </div>
                         <div class="tab-pane" id="map-view">
@@ -59,35 +44,8 @@
           <mat-step [stepControl]="secondFormGroup" label="Избери рамка">
             <div class="container-fluid">
               <app-choose-align (changeMapAlignEvent)='changeMapAlign($event)'></app-choose-align>
-              <h4 class="font-alt pb-0 mb-0">Изберете дизайн на картата</h4><br />
               <hr>
-              <div class="row">
-
-                <div class="col-sm-12">
-                  <div class="card col-sm-3 ml-2">
-                    <img class="card-img-top  pt-3" src="assets/images/map-design-1.png" alt="Card image cap">
-                    <h5 class="text-center">Card title</h5>
-                  </div>
-                  <div class="card col-sm-3 ml-2">
-                    <img class="card-img-top" src="assets/images/map-design-1.png" alt="Card image cap">
-                    <div class="card-body">
-                      <h5 class="text-center">Card title</h5>
-                    </div>
-                  </div>
-                  <div class="card col-sm-2 ml-2">
-                    <img class="card-img-top" src="assets/images/map-design-1.png" alt="Card image cap">
-                    <div class="card-body">
-                      <h5 class="text-center">Card title</h5>
-                    </div>
-                  </div>
-                  <div class="card col-sm-2 ml-2">
-                    <img class="card-img-top" src="assets/images/map-design-1.png" alt="Card image cap">
-                    <div class="card-body">
-                      <h5 class="text-center">Card title</h5>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <app-choose-map-style [map]='map'></app-choose-map-style>
               <h4 class="font-alt pb-0 mb-0">Детайли на картата</h4><br />
               <hr>
               <div class="row">
@@ -110,15 +68,39 @@
       </div>
     </div>
     <div class="col-sm-8 d-flex justify-content-center p-5" style="background-color: #f0eeee;">
-      <div class="container-fluid">
-        <div class="row justify-content-center">
+      <div class="container-fluid h-100">
+        <div class="row row h-100 justify-content-center align-items-center">
           <div class=" border rounded w-100 px-0 mt-5" [ngClass]="{
-            'phone_view_horizontal_map': (align==1 && innerWidth < 550),
-            'big_screen_view_horizontal_map': (align==1 && innerWidth > 550)
+            'phone_view_horizontal_map col-sm-11': (align==1 && innerWidth < 550),
+            'big_screen_view_horizontal_map col-sm-11': (align==1 && innerWidth > 550),
+            'phone_view_vertical_map col-sm-7': (align==2 && innerWidth < 550),
+            'big_screen_view_vertical_map col-sm-7': (align==2 && innerWidth > 550)
           }"
             style='box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;'>
             <div id="map"></div>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="changeTab" tabindex="-1" role="dialog" aria-labelledby="changeTabLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="changeTabLabel">Сигурни ли сте че искате да изберете друга категория?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          При смяна на категория се изчистват всички въведени данни от сегашната категория.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Отказ</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal"
+            (click)='changeVisualizationType()'>Продължи</button>
         </div>
       </div>
     </div>

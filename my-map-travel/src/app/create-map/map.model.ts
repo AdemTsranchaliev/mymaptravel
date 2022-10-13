@@ -1,6 +1,6 @@
 export interface MapModel {
-  directionCoordinates: number[];
-  lineCoordinates: number[];
+  coordinates: number[];
   selectedStyle: string;
+  selectedVisualization: number
   align: number;
 }

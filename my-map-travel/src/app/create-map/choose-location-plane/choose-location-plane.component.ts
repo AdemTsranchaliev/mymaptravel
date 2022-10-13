@@ -24,7 +24,7 @@ export class ChooseLocationPlaneComponent implements OnInit {
   ngOnInit(): void {
     this.startPoint = this.mapService.getGeocoder('startPoint');
     this.endPoint = this.mapService.getGeocoder('endPoint');
-    
+
     this.map.on('load', () => {
       document
         .getElementById('startPoint')!
@@ -35,31 +35,24 @@ export class ChooseLocationPlaneComponent implements OnInit {
     });
     this.startPoint.on('result', (results) => {
       this.startSelected = results?.result;
+      this.generateLine();
     });
 
     this.endPoint.on('result', (results) => {
       this.endSelected = results?.result;
-
-      if (this.endSelected?.geometry) {
-        if (this.map.getLayer('route')) {
-          this.map.removeLayer('route');
-        }
-
-        if (this.map.getSource('route')) {
-          this.map.removeSource('route');
-        }
-
-        let myuuid = 'route';
-        // this.startSelected?.geometry?.coordinates,
-        // this.endSelected?.geometry?.coordinates; // northeastern corner of the bounds
-        timer(300).subscribe(() => {
-          this.mapService.addLine(
-            this.map,
-            this.startSelected?.geometry?.coordinates,
-            this.endSelected?.geometry?.coordinates
-          );
-        });
-      }
+      this.generateLine();
     });
+  }
+
+  public generateLine() {
+    if (this.endSelected && this.startSelected) {
+      timer(300).subscribe(() => {
+        this.mapService.addLine(
+          this.map,
+          this.startSelected?.geometry?.coordinates,
+          this.endSelected?.geometry?.coordinates
+        );
+      });
+    }
   }
 }
