@@ -1,18 +1,29 @@
 <div class="container-fluid">
-    <div class="row">
+    <div class="row mt-1" *ngFor='let geocoder of geocoders; let i=index'>
         <div class="col-sm-12 d-flex justify-content-center">
-            <div id="startPoint" class="geocoder"></div>
-        </div>
-    </div>
-    <div class="row mt-5">
-        <div class="col-sm-12 d-flex justify-content-center">
-            <div id="endPoint" class="geocoder"></div>
+            <div attr.id="point-{{i}}" class="geocoder"></div>
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-2 col-sm-offset-5">
-            <div class="large-text align-center"><a class="section-scroll" href="#services"><i
-                        class="fa fa-plus-circle"></i></a></div>
+        <div class="col-sm-12 d-flex justify-content-center h3 mb-0">
+            <i class="fa fa-plus-circle"></i>
+        </div>
+        <div class="col-sm-12 d-flex justify-content-center mt-0 pt-0" (click)='addLine()   '>
+            <div class=" h6">Добави маршурут</div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="list-group list-group-flush w-100 border-top">
+                <li class="list-group-item border-bottom">
+                    <div class="row">
+                        <div class="col-sm-5 h5">София</div>
+                        <div class="col-sm-2 h5"><i class="fa fa-long-arrow-right"></i></div>
+                        <div class="col-sm-5 h5">Пловдив</div>
+                    </div>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

@@ -38,6 +38,18 @@ export class MapService {
       marker: false,
       flyTo: true,
       placeholder: placeholder ? placeholder : 'Търсене',
+      addressAccuracy: 'place',
+      getItemValue: function (item) {
+        return item.text;
+      },
+      render: function (item) {
+        return `<div class='geocoder-dropdown-item'>
+                    <span class='geocoder-dropdown-text'>
+                      ${item.text}
+                    </span>
+                    <footer class="blockquote-footer">${item.place_name}</footer>
+                 </div>`;
+      },
     });
   }
 
@@ -79,8 +91,8 @@ export class MapService {
           'line-cap': 'round',
         },
         paint: {
-          'line-color': '#BF93E4',
-          'line-width': 5,
+          'line-color': '#000000',
+          'line-width': 2,
         },
       });
     }
@@ -126,13 +138,156 @@ export class MapService {
         'line-cap': 'round',
       },
       paint: {
-        'line-color': '#888',
-        'line-width': 5,
+        'line-color': '#000000',
+        'line-width': 1,
       },
     });
 
     timer(10).subscribe(() => {
       map.fitBounds([startCoordinates, endCoordinates], { padding: 60 });
+    });
+  }
+
+  addMarker(
+    map: mapboxgl.Map,
+    startCoordinates,
+    startMarkerName,
+    endCoordinates,
+    endMarkerName
+  ) {
+    if (map.getSource('points')) {
+      //  map.getSource('points')._data.features.push({
+      //     // feature for Mapbox SF
+      //     'type': 'Feature',
+      //     'geometry': {
+      //     'type': 'Point',
+      //     'coordinates': [-122.414, 37.776]
+      //     },
+      //     'properties': {
+      //     'title': 'Mapbox SF'
+      //     }
+      //     });
+
+      map.getSource('points').setData({
+        type: 'FeatureCollection',
+        features: [
+          {
+            // feature for Mapbox DC
+            type: 'Feature',
+            geometry: {
+              type: 'Point',
+              coordinates: startCoordinates,
+            },
+            properties: {
+              title: startMarkerName,
+            },
+          },
+          {
+            // feature for Mapbox DC
+            type: 'Feature',
+            geometry: {
+              type: 'Point',
+              coordinates: endCoordinates,
+            },
+            properties: {
+              title: endMarkerName,
+            },
+          },
+        ],
+      });
+      console.log(map.getSource('points')._data.features);
+    } else {
+      map.addSource('points', {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: [
+            {
+              // feature for Mapbox DC
+              type: 'Feature',
+              geometry: {
+                type: 'Point',
+                coordinates: startCoordinates,
+              },
+              properties: {
+                title: startMarkerName,
+              },
+            },
+            {
+              // feature for Mapbox DC
+              type: 'Feature',
+              geometry: {
+                type: 'Point',
+                coordinates: endCoordinates,
+              },
+              properties: {
+                title: endMarkerName,
+              },
+            },
+          ],
+        },
+      });
+    }
+
+    if (map.getLayer('points')) {
+      map.removeLayer('points');
+    }
+    map.addLayer({
+      id: 'points',
+      type: 'symbol',
+      source: 'points',
+      layout: {
+        // get the title name from the source's "title" property
+        'text-field': ['get', 'title'],
+        'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
+        'text-offset': [0, 1.25],
+        'text-anchor': 'top',
+      },
+    });
+  }
+
+
+  public addLines(
+    map: mapboxgl.Map,
+    coordinates: any[]
+  ) {
+    let id = 'route';
+
+    if (map.getLayer(id)) {
+      map.removeLayer(id);
+    }
+    if (map.getSource(id)) {
+      map.removeSource(id);
+    }
+
+    map.addSource(id, {
+      type: 'geojson',
+      data: {
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'LineString',
+          coordinates: coordinates,
+        },
+      },
+    });
+
+    map.addLayer({
+      id: id,
+      type: 'line',
+      source: 'route',
+      layout: {
+        'line-join': 'round',
+        'line-cap': 'round',
+      },
+      paint: {
+        'line-color': '#000000',
+        'line-width': 1,
+      },
+    });
+
+    timer(10).subscribe(() => {
+      map.fitBounds(coordinates, { padding: 60 });
     });
   }
 }

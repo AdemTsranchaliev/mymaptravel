@@ -54,6 +54,8 @@ export class ChooseLocationCarComponent implements OnInit {
         )
         .subscribe((x: any) => {
           timer(10).subscribe(() => {
+            this.mapService.addMarker(this.map,this.startSelected?.geometry?.coordinates,this.startSelected?.text,this.endSelected?.geometry?.coordinates,this.endSelected?.text);
+
             this.mapService.addDirections(
               this.map,
               x.routes[0].geometry.coordinates
