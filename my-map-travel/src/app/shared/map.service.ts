@@ -195,7 +195,6 @@ export class MapService {
           },
         ],
       });
-      console.log(map.getSource('points')._data.features);
     } else {
       map.addSource('points', {
         type: 'geojson',
@@ -245,12 +244,66 @@ export class MapService {
       },
     });
   }
+  addMarkerDynamic(map: mapboxgl.Map, geocoders, geocoderNumbers, length) {
+    let data: any[] = [];
 
+    geocoders.forEach((geocoder, index) => {
+      if (index < length) {
+        let temp: any;
 
-  public addLines(
-    map: mapboxgl.Map,
-    coordinates: any[]
-  ) {
+        if (geocoder[index]) {
+          temp = geocoder[index];
+        } else if (geocoder?.geometry) {
+          temp = geocoder;
+        }
+
+        data.push({
+          // feature for Mapbox DC
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: temp?.geometry?.coordinates,
+          },
+          properties: {
+            title: temp?.text,
+          },
+        });
+      }
+    });
+
+    if (map.getSource('points')) {
+      map.getSource('points').setData({
+        type: 'FeatureCollection',
+        features: data,
+      });
+    } else {
+      map.addSource('points', {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: data,
+        },
+      });
+    }
+
+    if (map.getLayer('points')) {
+      map.removeLayer('points');
+    }
+    map.addLayer({
+      id: 'points',
+      type: 'symbol',
+      source: 'points',
+      layout: {
+        // get the title name from the source's "title" property
+        'text-field': ['get', 'title'],
+        'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
+        'text-offset': [0, 1.25],
+        'text-anchor': 'top',
+      },
+    });
+  }
+
+  public addLines(map: mapboxgl.Map, coordinates: any[]) {
     let id = 'route';
 
     if (map.getLayer(id)) {
@@ -286,8 +339,20 @@ export class MapService {
       },
     });
 
-    timer(10).subscribe(() => {
-      map.fitBounds(coordinates, { padding: 60 });
+    // timer(10).subscribe(() => {
+
+    //   map.fitBounds(coordinates, { padding: 60 });
+    // });
+  }
+
+  getCenterCoordinates(coordinates: any[]) {
+    let lat = 0;
+    let lon = 0;
+    coordinates.forEach((element) => {
+      lat += element[0];
+      lon += element[1];
     });
+    var llb = new mapboxgl.LngLatBounds([lon, lat]);
+    return llb;
   }
 }

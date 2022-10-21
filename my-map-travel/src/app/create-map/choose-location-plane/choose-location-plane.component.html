@@ -1,15 +1,35 @@
 <div class="container-fluid">
-    <div class="row mt-1" *ngFor='let geocoder of geocoders; let i=index'>
+    <div class="row mt-5" *ngFor='let geocoder of geocoders; let i=index' [hidden]='!showProperties[i]'>
         <div class="col-sm-12 d-flex justify-content-center">
             <div attr.id="point-{{i}}" class="geocoder"></div>
         </div>
+        <!-- <div class="col-sm-2 d-flex justify-content-center h4 text-danger" *ngIf='firstFreeIndex>2'>
+            <i class="fa fa-fw" style="cursor: pointer;" (click)='removePoint()'></i>
+        </div> -->
     </div>
     <div class="row">
-        <div class="col-sm-12 d-flex justify-content-center h3 mb-0">
-            <i class="fa fa-plus-circle"></i>
+        <div class="mt-0 pt-0 clickable"
+            [ngClass]="{'col-sm-6': firstFreeIndex>2&&firstFreeIndex<=9 , 'col-sm-12' : firstFreeIndex>=10 }"
+            (click)='removePoint()' *ngIf='firstFreeIndex>2'>
+            <div class="row h4 text-danger">
+                <div class="col-sm-12 d-flex justify-content-center">
+                    <i class="fa fa-minus-circle"></i>
+                </div>
+                <div class="col-sm-12 d-flex justify-content-center">
+                    <div class=" h6">Премахни маршурут</div>
+                </div>
+            </div>
         </div>
-        <div class="col-sm-12 d-flex justify-content-center mt-0 pt-0" (click)='addLine()   '>
-            <div class=" h6">Добави маршурут</div>
+        <div class="mt-0 pt-0 clickable" [ngClass]="{'col-sm-12': firstFreeIndex<=2 , 'col-sm-6' : firstFreeIndex>=2 }"
+            (click)='addLine()' *ngIf='firstFreeIndex<=9'>
+            <div class="row h4">
+                <div class="col-sm-12 d-flex justify-content-center">
+                    <i class="fa fa-plus-circle"></i>
+                </div>
+                <div class="col-sm-12 d-flex justify-content-center">
+                    <div class=" h6">Добави маршурут</div>
+                </div>
+            </div>
         </div>
     </div>
 

@@ -13,19 +13,39 @@ import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 export class ChooseLocationPlaneComponent implements OnInit {
   @Input() map: Map;
   @Input() mapData: MapModel;
-  startPoint: MapboxGeocoder;
-  endPoint: MapboxGeocoder;
-  initData: string[] = ['Начална точка','Крайна точка'];
+  showProperties: boolean[] = [
+    true,
+    true,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+  ];
+  firstFreeIndex = 2;
 
-  public geocoders: any[] = [];
+  public geocoders: any[] = [
+    this.mapService.getGeocoder('Начална точка'),
+    this.mapService.getGeocoder('Крайна точка'),
+    this.mapService.getGeocoder('Нова точка'),
+    this.mapService.getGeocoder('Нова точка'),
+    this.mapService.getGeocoder('Нова точка'),
+    this.mapService.getGeocoder('Нова точка'),
+    this.mapService.getGeocoder('Нова точка'),
+    this.mapService.getGeocoder('Нова точка'),
+    this.mapService.getGeocoder('Нова точка'),
+    this.mapService.getGeocoder('Нова точка'),
+  ];
+  public geocoderNumbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
   public startSelected: any;
   public endSelected: any;
   constructor(private mapService: MapService) {}
 
   ngOnInit(): void {
-    this.geocoders.push(this.mapService.getGeocoder('Начална точка'));
-    this.geocoders.push(this.mapService.getGeocoder('Крайна точка'));
-
     this.map.on('load', () => {
       this.geocoders.forEach((geocoder, index) => {
         document
@@ -37,49 +57,72 @@ export class ChooseLocationPlaneComponent implements OnInit {
     this.geocoders.forEach((geocoder, index) => {
       geocoder.on('result', (results) => {
         geocoder[index] = results?.result;
-        if (index == 1) this.generateLine();
+        if (index >= 1) this.generateLine();
       });
     });
   }
 
   public addLine() {
-    let temp = this.mapService.getGeocoder('Нова точка');
-    this.geocoders.push(temp);
-    timer(10).subscribe(() => {
-      document
-        .getElementById(`point-${this.geocoders.length - 1}`)!
-        .replaceWith(this.geocoders[this.geocoders.length - 1].onAdd(this.map));
-
-      this.geocoders[this.geocoders.length - 1].on('result', (results) => {
-        this.geocoders[this.geocoders.length - 1] = results?.result;
-        this.generateLine();
-      });
-    });
+    this.showProperties[this.firstFreeIndex] = true;
+    this.firstFreeIndex++;
   }
- 
-  public generateLine() {
-    if (this.geocoders.length >= 2) {
-      timer(10).subscribe(() => {
-        let coordinates: any[] = [];
-        this.geocoders.forEach((geocoder, index) => {
-          console.log(geocoder);
-          if(geocoder[index]){
-            coordinates.push(geocoder[index]?.geometry?.coordinates);
-          }
-          else{
-            coordinates.push(geocoder?.geometry?.coordinates);
-          }
-        });
-        // this.mapService.addMarker(
-        //   this.map,
-        //   this.startSelected?.geometry?.coordinates,
-        //   this.startSelected?.text,
-        //   this.endSelected?.geometry?.coordinates,
-        //   this.endSelected?.text
-        // );
 
-        this.mapService.addLines(this.map, coordinates);
-      });
-    }
+  public generateLine() {
+    let coordinates: any[] = [];
+    this.geocoders.forEach((geocoder, index) => {
+      if (index < this.firstFreeIndex) {
+        if (geocoder[this.geocoderNumbers[index]]) {
+          coordinates.push(
+            geocoder[this.geocoderNumbers[index]]?.geometry?.coordinates
+          );
+        } else if (geocoder?.geometry) {
+          coordinates.push(geocoder?.geometry?.coordinates);
+        }
+      }
+    });
+    // this.mapService.addMarker(
+    //   this.map,
+    //   this.startSelected?.geometry?.coordinates,
+    //   this.startSelected?.text,
+    //   this.endSelected?.geometry?.coordinates,
+    //   this.endSelected?.text
+    // );
+    this.mapService.addMarkerDynamic(
+      this.map,
+      this.geocoders,
+      this.geocoderNumbers,
+      this.firstFreeIndex
+    );
+    this.mapService.addLines(this.map, coordinates);
+  }
+
+  removePoint() {
+    this.showProperties[this.firstFreeIndex - 1] = false;
+    this.geocoders[this.firstFreeIndex - 1].clear();
+    this.firstFreeIndex--;
+    this.generateLine();
+
+    // //Remove elements
+    // let item = this.geocoders.splice(index, 1);
+    // this.showProperties.splice(index, 1);
+    // let deletedNumber = this.geocoderNumbers.splice(index, 1);
+
+    // let pp = this.mapService.getGeocoder('Нова точка');
+    // //Add new elements
+    // this.geocoders.push(pp);
+    // this.showProperties.push(false);
+    // this.geocoderNumbers.push(deletedNumber[0]);
+    // this.firstFreeIndex--;
+
+    // this.map.on('load', () => {
+    //   document
+    //     .getElementById(`point-${index}`)!
+    //     .replaceWith(pp.onAdd(this.map));
+    // });
+
+    // pp.on('result', (results) => {
+    //   pp = results?.result;
+    //   if (index >= 1) this.generateLine();
+    // });
   }
 }
