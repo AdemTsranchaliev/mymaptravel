@@ -11,8 +11,32 @@ import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 })
 export class ChooseLocationCarComponent implements OnInit {
   @Input() map: Map;
-  startPoint: MapboxGeocoder;
-  endPoint: MapboxGeocoder;
+  showProperties: boolean[] = [
+    true,
+    true,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+  ];
+  firstFreeIndex = 2;
+
+  public geocoders: any[] = [
+    this.mapService.getGeocoder('Начална точка'),
+    this.mapService.getGeocoder('Крайна точка'),
+    this.mapService.getGeocoder('Нова точка'),
+    this.mapService.getGeocoder('Нова точка'),
+    this.mapService.getGeocoder('Нова точка'),
+    this.mapService.getGeocoder('Нова точка'),
+    this.mapService.getGeocoder('Нова точка'),
+    this.mapService.getGeocoder('Нова точка'),
+    this.mapService.getGeocoder('Нова точка'),
+    this.mapService.getGeocoder('Нова точка'),
+  ];
 
   public startSelected: any = null;
   public endSelected: any = null;
@@ -20,48 +44,55 @@ export class ChooseLocationCarComponent implements OnInit {
   constructor(private mapService: MapService) {}
 
   ngOnInit(): void {
-    this.startPoint = this.mapService.getGeocoder('startPoint');
-    this.endPoint = this.mapService.getGeocoder('endPoint');
-
     this.map.on('load', () => {
-      document
-        .getElementById('startPoint')!
-        .replaceWith(this.startPoint.onAdd(this.map));
-      document
-        .getElementById('endPoint')!
-        .replaceWith(this.endPoint.onAdd(this.map));
+      this.geocoders.forEach((geocoder, index) => {
+        document
+          .getElementById(`point-${index}`)!
+          .replaceWith(geocoder.onAdd(this.map));
+      });
     });
 
-    this.startPoint.on('result', (results) => {
-      this.startSelected = results?.result;
-      this.generateDirections();
-    });
-
-    this.endPoint.on('result', (results) => {
-      this.endSelected = results?.result;
-      this.generateDirections();
+    this.geocoders.forEach((geocoder, index) => {
+      geocoder.on('result', (results) => {
+        geocoder[index] = results?.result;
+        if (index >= 1) this.generateDirections();
+      });
     });
   }
 
   public generateDirections() {
-    if (this.startSelected && this.endSelected) {
-      this.mapService
-        .getDirections(
-          this.startSelected.geometry.coordinates[0],
-          this.startSelected.geometry.coordinates[1],
-          this.endSelected.geometry.coordinates[0],
-          this.endSelected.geometry.coordinates[1]
-        )
-        .subscribe((x: any) => {
-          timer(10).subscribe(() => {
-            this.mapService.addMarker(this.map,this.startSelected?.geometry?.coordinates,this.startSelected?.text,this.endSelected?.geometry?.coordinates,this.endSelected?.text);
+    let coordinates: number[] = this.mapService.getCoordinatesByGeocoder(
+      this.geocoders,
+      this.firstFreeIndex
+    );
 
-            this.mapService.addDirections(
-              this.map,
-              x.routes[0].geometry.coordinates
-            );
-          });
+    this.mapService
+      .getDirectionsByCoordinates(coordinates)
+      .subscribe((x: any) => {
+        timer(10).subscribe(() => {
+          this.mapService.addMarkerDynamic(
+            this.map,
+            this.geocoders,
+            this.firstFreeIndex
+          );
+
+          this.mapService.addDirections(
+            this.map,
+            x.routes[0].geometry.coordinates
+          );
         });
-    }
+      });
+  }
+
+  public addLine() {
+    this.showProperties[this.firstFreeIndex] = true;
+    this.firstFreeIndex++;
+  }
+
+  removePoint() {
+    this.showProperties[this.firstFreeIndex - 1] = false;
+    this.geocoders[this.firstFreeIndex - 1].clear();
+    this.firstFreeIndex--;
+    this.generateDirections();
   }
 }

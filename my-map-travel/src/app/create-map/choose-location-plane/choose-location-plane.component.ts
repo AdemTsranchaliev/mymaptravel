@@ -39,10 +39,6 @@ export class ChooseLocationPlaneComponent implements OnInit {
     this.mapService.getGeocoder('Нова точка'),
     this.mapService.getGeocoder('Нова точка'),
   ];
-  public geocoderNumbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-  public startSelected: any;
-  public endSelected: any;
   constructor(private mapService: MapService) {}
 
   ngOnInit(): void {
@@ -68,29 +64,14 @@ export class ChooseLocationPlaneComponent implements OnInit {
   }
 
   public generateLine() {
-    let coordinates: any[] = [];
-    this.geocoders.forEach((geocoder, index) => {
-      if (index < this.firstFreeIndex) {
-        if (geocoder[this.geocoderNumbers[index]]) {
-          coordinates.push(
-            geocoder[this.geocoderNumbers[index]]?.geometry?.coordinates
-          );
-        } else if (geocoder?.geometry) {
-          coordinates.push(geocoder?.geometry?.coordinates);
-        }
-      }
-    });
-    // this.mapService.addMarker(
-    //   this.map,
-    //   this.startSelected?.geometry?.coordinates,
-    //   this.startSelected?.text,
-    //   this.endSelected?.geometry?.coordinates,
-    //   this.endSelected?.text
-    // );
+    let coordinates: number[] = this.mapService.getCoordinatesByGeocoder(
+      this.geocoders,
+      this.firstFreeIndex
+    );
+
     this.mapService.addMarkerDynamic(
       this.map,
       this.geocoders,
-      this.geocoderNumbers,
       this.firstFreeIndex
     );
     this.mapService.addLines(this.map, coordinates);
@@ -101,28 +82,5 @@ export class ChooseLocationPlaneComponent implements OnInit {
     this.geocoders[this.firstFreeIndex - 1].clear();
     this.firstFreeIndex--;
     this.generateLine();
-
-    // //Remove elements
-    // let item = this.geocoders.splice(index, 1);
-    // this.showProperties.splice(index, 1);
-    // let deletedNumber = this.geocoderNumbers.splice(index, 1);
-
-    // let pp = this.mapService.getGeocoder('Нова точка');
-    // //Add new elements
-    // this.geocoders.push(pp);
-    // this.showProperties.push(false);
-    // this.geocoderNumbers.push(deletedNumber[0]);
-    // this.firstFreeIndex--;
-
-    // this.map.on('load', () => {
-    //   document
-    //     .getElementById(`point-${index}`)!
-    //     .replaceWith(pp.onAdd(this.map));
-    // });
-
-    // pp.on('result', (results) => {
-    //   pp = results?.result;
-    //   if (index >= 1) this.generateLine();
-    // });
   }
 }

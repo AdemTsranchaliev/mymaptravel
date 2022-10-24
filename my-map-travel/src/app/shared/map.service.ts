@@ -59,6 +59,22 @@ export class MapService {
     );
   }
 
+  public getDirectionsByCoordinates(coordinates:any[]) {
+    let result='';
+    coordinates.forEach((x,index)=>{
+      if(coordinates.length-1==index){
+        result+=`${x[0]},${x[1]}`
+      }
+      else{
+        result+=`${x[0]},${x[1]};`
+      }
+    });
+
+    return this.http.get(
+      `https://api.mapbox.com/directions/v5/mapbox/driving/${result}?geometries=geojson&access_token=${this.env.MAPBOX_PUBLIC_KEY}`
+    );
+  }
+
   public addDirections(map: mapboxgl.Map, coordinates: any[]) {
     let id = 'LineString';
 
@@ -244,7 +260,7 @@ export class MapService {
       },
     });
   }
-  addMarkerDynamic(map: mapboxgl.Map, geocoders, geocoderNumbers, length) {
+  addMarkerDynamic(map: mapboxgl.Map, geocoders, length) {
     let data: any[] = [];
 
     geocoders.forEach((geocoder, index) => {
@@ -343,6 +359,23 @@ export class MapService {
 
     //   map.fitBounds(coordinates, { padding: 60 });
     // });
+  }
+
+  getCoordinatesByGeocoder(geocoders: any, lenght: number){
+    let coordinates: number[] = [];
+     geocoders.forEach((geocoder, index) => {
+      if (index < lenght) {
+        if (geocoder[index]) {
+          coordinates.push(
+            geocoder[index]?.geometry?.coordinates
+          );
+        } else if (geocoder?.geometry) {
+          coordinates.push(geocoder?.geometry?.coordinates);
+        }
+      }
+    });
+
+    return coordinates;
   }
 
   getCenterCoordinates(coordinates: any[]) {
