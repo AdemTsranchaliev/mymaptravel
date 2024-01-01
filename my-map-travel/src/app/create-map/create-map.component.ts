@@ -1,7 +1,7 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { StepperOrientation } from '@angular/material/stepper';
+import { MatStepper, StepperOrientation } from '@angular/material/stepper';
 import { Observable, timer } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as mapboxgl from 'mapbox-gl';
@@ -10,7 +10,8 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 import { MapService } from '../shared/map.service';
 import { HttpClient } from '@angular/common/http';
-declare var $:any;
+import { MapModel } from './map.model';
+declare var $: any;
 
 @Component({
   selector: 'app-create-map',
@@ -19,6 +20,7 @@ declare var $:any;
 })
 export class CreateMapComponent implements OnInit {
   public map: mapboxgl.Map;
+  public mapData: MapModel = new MapModel();
   public startSelected: any;
   public endSelected: any;
   public innerWidth: number;
@@ -26,6 +28,7 @@ export class CreateMapComponent implements OnInit {
   @HostListener('window:resize', ['$event']) onResize(event) {
     this.innerWidth = window.innerWidth;
   }
+  @ViewChild('stepper') stepper: MatStepper;
 
   // public startPoint: MapboxGeocoder;
   // public endPoint: MapboxGeocoder;
@@ -44,8 +47,7 @@ export class CreateMapComponent implements OnInit {
   constructor(
     private _formBuilder: FormBuilder,
     breakpointObserver: BreakpointObserver,
-    private mapService: MapService,
-    private http: HttpClient
+    private mapService: MapService
   ) {
     this.stepperOrientation = breakpointObserver
       .observe('(min-width: 800px)')
@@ -55,8 +57,9 @@ export class CreateMapComponent implements OnInit {
   ngOnInit(): void {
     this.map = this.mapService.initializeMap();
     this.innerWidth = window.innerWidth;
-
     this.map.on('style.load', () => {
+      document.getElementById('info').innerHTML = 'This is a title';
+
       this.map.setFog({});
       this.map.resize();
     });
@@ -67,10 +70,11 @@ export class CreateMapComponent implements OnInit {
     timer(10).subscribe((x) => {
       this.map.resize();
     });
+    console.log(this.mapData);
   }
 
   public changeVisualizationType() {
-    let ids = ['route', 'LineString'];
+    let ids = ['route', 'LineString', 'points'];
 
     ids.forEach((x) => {
       if (this.map.getLayer(x)) {
@@ -80,8 +84,40 @@ export class CreateMapComponent implements OnInit {
         this.map.removeSource(x);
       }
     });
-
+    this.mapData.coordinates = [];
     $('#changeTab').modal('hide');
+  }
 
+  disableMap(event){
+    if(event.selectedIndex == 2){
+      this.map['scrollZoom'].disable();
+      this.map['boxZoom'].disable();
+      this.map['dragRotate'].disable();
+      this.map['dragPan'].disable();
+      this.map['keyboard'].disable();
+      this.map['doubleClickZoom'].disable();
+      this.map['touchZoomRotate'].disable();
+    }
+    else{
+      this.map['scrollZoom'].enable();
+      this.map['boxZoom'].enable();
+      this.map['dragRotate'].enable();
+      this.map['dragPan'].enable();
+      this.map['keyboard'].enable();
+      this.map['doubleClickZoom'].enable();
+      this.map['touchZoomRotate'].enable();
+    }
+
+
+
+  }
+
+  public changeType(typeId: number) {
+    if (typeId != this.mapData.selectedVisualization) {
+      this.mapData.selectedVisualization = typeId;
+      if (this.mapData.coordinates.length > 0) {
+        $('#changeTab').modal('show');
+      }
+    }
   }
 }

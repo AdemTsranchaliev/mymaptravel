@@ -4,6 +4,7 @@ import { Enviorment } from './enviorment';
 import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import { HttpClient } from '@angular/common/http';
 import { timer } from 'rxjs';
+import { Point } from '../create-map/map.model';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +22,7 @@ export class MapService {
       container: containerId ? containerId : 'map',
       style: style
         ? style
-        : 'mapbox://styles/ademski/cl8wzud5c003h14nroc6ygwxt',
+        : 'mapbox://styles/ademski/cl8wyrlke005415n2wa35vuzd',
       center: center,
       zoom: zoom ? zoom : 1,
       accessToken: this.env.MAPBOX_PUBLIC_KEY,
@@ -59,14 +60,13 @@ export class MapService {
     );
   }
 
-  public getDirectionsByCoordinates(coordinates:any[]) {
-    let result='';
-    coordinates.forEach((x,index)=>{
-      if(coordinates.length-1==index){
-        result+=`${x[0]},${x[1]}`
-      }
-      else{
-        result+=`${x[0]},${x[1]};`
+  public getDirectionsByCoordinates(coordinates: any[]) {
+    let result = '';
+    coordinates.forEach((x, index) => {
+      if (coordinates.length - 1 == index) {
+        result += `${x[0]},${x[1]}`;
+      } else {
+        result += `${x[0]},${x[1]};`;
       }
     });
 
@@ -260,28 +260,20 @@ export class MapService {
       },
     });
   }
-  addMarkerDynamic(map: mapboxgl.Map, geocoders, length) {
+  addMarkerDynamic(map: mapboxgl.Map, coordinates: Point[], length: number) {
     let data: any[] = [];
 
-    geocoders.forEach((geocoder, index) => {
+    coordinates.forEach((coordinate, index) => {
       if (index < length) {
-        let temp: any;
-
-        if (geocoder[index]) {
-          temp = geocoder[index];
-        } else if (geocoder?.geometry) {
-          temp = geocoder;
-        }
-
         data.push({
           // feature for Mapbox DC
           type: 'Feature',
           geometry: {
             type: 'Point',
-            coordinates: temp?.geometry?.coordinates,
+            coordinates: [coordinate.longitude, coordinate.latitude],
           },
           properties: {
-            title: temp?.text,
+            title: coordinate?.placeName,
           },
         });
       }
@@ -361,20 +353,32 @@ export class MapService {
     // });
   }
 
-  getCoordinatesByGeocoder(geocoders: any, lenght: number){
+  getCoordinatesByGeocoder(geocoders: any, lenght: number) {
     let coordinates: number[] = [];
-     geocoders.forEach((geocoder, index) => {
+    geocoders.forEach((geocoder, index) => {
       if (index < lenght) {
-        if (geocoder[index]) {
-          coordinates.push(
-            geocoder[index]?.geometry?.coordinates
-          );
-        } else if (geocoder?.geometry) {
-          coordinates.push(geocoder?.geometry?.coordinates);
-        }
+        let geocoderData = this.getGeocoderData(geocoder, index);
+
+        coordinates.push(geocoderData.geometry?.coordinates);
       }
     });
 
+    return coordinates;
+  }
+
+  getCoordinatesModelByGeocoder(geocoders: any, lenght: number) {
+    let coordinates: Point[] = [];
+
+    geocoders.forEach((geocoder, index) => {
+      if (index < lenght) {
+        let geocoderData = this.getGeocoderData(geocoder, index);
+        coordinates.push(<Point>{
+          longitude: geocoderData?.geometry?.coordinates[0],
+          latitude: geocoderData?.geometry?.coordinates[1],
+          placeName: geocoderData?.text,
+        });
+      }
+    });
     return coordinates;
   }
 
@@ -387,5 +391,16 @@ export class MapService {
     });
     var llb = new mapboxgl.LngLatBounds([lon, lat]);
     return llb;
+  }
+
+  getGeocoderData(geocoder, index) {
+    let data: any;
+    if (geocoder[index]) {
+      data = geocoder[index];
+    } else if (geocoder?.geometry) {
+      data = geocoder;
+    }
+
+    return data;
   }
 }

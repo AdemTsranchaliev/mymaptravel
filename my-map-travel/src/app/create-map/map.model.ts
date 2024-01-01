@@ -1,17 +1,22 @@
 export class MapModel {
-  routes: Route[];
+  coordinates: Point[] = [];
   selectedStyle: string;
-  selectedVisualization: number;
+  selectedVisualization: number = 0;
   align: number;
+
+  getCoordinates() {
+    let coordinates = [];
+
+    this.coordinates.forEach((element) => {
+      coordinates.push([element.longitude, element.latitude]);
+    });
+
+    return coordinates;
+  }
 }
 
-export class Route {
-  startPoint: Place;
-  endPoint: Place;
-}
-
-export class Place {
-  longitude: number;
-  latitude: number;
-  placeName: string;
+export class Point {
+  longitude: number = 0;
+  latitude: number = 0;
+  placeName: string = '';
 }

@@ -3,6 +3,7 @@ import { Map } from 'mapbox-gl';
 import { timer } from 'rxjs';
 import { MapService } from 'src/app/shared/map.service';
 import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+import { MapModel } from '../map.model';
 
 @Component({
   selector: 'app-choose-location-car',
@@ -11,6 +12,8 @@ import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 })
 export class ChooseLocationCarComponent implements OnInit {
   @Input() map: Map;
+  @Input() mapData: MapModel;
+
   showProperties: boolean[] = [
     true,
     true,
@@ -70,12 +73,18 @@ export class ChooseLocationCarComponent implements OnInit {
       .getDirectionsByCoordinates(coordinates)
       .subscribe((x: any) => {
         timer(10).subscribe(() => {
+          this.mapData.coordinates =
+            this.mapService.getCoordinatesModelByGeocoder(
+              this.geocoders,
+              this.firstFreeIndex
+            );
+
           this.mapService.addMarkerDynamic(
             this.map,
-            this.geocoders,
+            this.mapData.coordinates,
             this.firstFreeIndex
           );
-
+          console.log(JSON.stringify(x.routes[0].geometry.coordinates));
           this.mapService.addDirections(
             this.map,
             x.routes[0].geometry.coordinates

@@ -69,9 +69,15 @@ export class ChooseLocationPlaneComponent implements OnInit {
       this.firstFreeIndex
     );
 
+    this.mapData.coordinates = this.mapService.getCoordinatesModelByGeocoder(
+      this.geocoders,
+      this.firstFreeIndex
+    );
+    console.log(coordinates);
+      console.log(this.mapData.coordinates);
     this.mapService.addMarkerDynamic(
       this.map,
-      this.geocoders,
+      this.mapData.coordinates,
       this.firstFreeIndex
     );
     this.mapService.addLines(this.map, coordinates);

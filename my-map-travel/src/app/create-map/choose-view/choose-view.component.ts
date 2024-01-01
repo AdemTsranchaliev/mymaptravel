@@ -19,7 +19,7 @@ export class ChooseViewComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.viewPoint = this.mapService.getGeocoder('viewPoint');
+    this.viewPoint = this.mapService.getGeocoder('Ню Йорк');
 
     this.map.on('load', () => {
       

@@ -1,9 +1,9 @@
-<div class="container-fluid">
-  <div class="row d-flex justify-content-cente">
+<div class="container-fluid pt-5 mt-5">
+  <div class="row d-flex justify-content-cente" style="min-height: 95vh;">
     <div class="col-sm-4" style="background-color: #ffffff !important;">
       <div class="row p-4">
         <h4 class="font-alt">Настройки</h4><br />
-        <mat-stepper class="example-stepper w-100" style="max-height: 700px; min-height: 700px; overflow-y: auto;"
+        <mat-stepper class="example-stepper w-100" style="max-height: 900px; min-height: 100px; overflow-y: auto;" (selectionChange)="disableMap($event)">
           [orientation]="(stepperOrientation | async)!">
           <mat-step [stepControl]="firstFormGroup" label="Избери дизайн">
             <form [formGroup]="firstFormGroup">
@@ -15,24 +15,24 @@
                     <hr class="divider-w">
                     <div role="tabpanel">
                       <ul class="nav nav-tabs font-alt pt-20" role="tablist">
-                        <li class="active"><a href="#support" data-toggle="tab" data-toggle="modal"
-                            data-target="#changeTab"> <i class="fa fa-plane fa-lg"></i>Пътуване
+                        <li class="active" (click)='changeType(0)'><a href="#support" data-toggle="tab"> <i
+                              class="fa fa-plane fa-lg"></i>Пътуване
                             със самолет</a></li>
-                        <li data-toggle="modal" data-target="#changeTab"><a href="#sales" data-toggle="tab"> <i
+                        <li (click)='changeType(1)'><a href="#sales" data-toggle="tab"> <i
                               class="fa fa-car fa-lg"></i>Пътуване с кола</a>
                         </li>
-                        <li data-toggle="modal" data-target="#changeTab"><a href="#map-view" data-toggle="tab"> <span
-                              class="icon-map fa-lg" aria-hidden="true"></span>Изглед</a></li>
+                        <li (click)='changeType(2)'><a href="#map-view" data-toggle="tab"> <span class="icon-map fa-lg"
+                              aria-hidden="true"></span>Изглед</a></li>
                       </ul>
                       <div class="tab-content">
                         <div class="tab-pane active" id="support">
-                          <app-choose-location-plane [map]='map'></app-choose-location-plane>
+                          <app-choose-location-plane [mapData]='mapData' [map]='map'></app-choose-location-plane>
                         </div>
                         <div class="tab-pane" id="sales">
-                          <app-choose-location-car [map]='map'></app-choose-location-car>
+                          <app-choose-location-car [mapData]='mapData' [map]='map'></app-choose-location-car>
                         </div>
                         <div class="tab-pane" id="map-view">
-                          <app-choose-view [map]='map'></app-choose-view>
+                          <app-choose-view [mapData]='mapData' [map]='map'></app-choose-view>
                         </div>
                       </div>
                     </div>
@@ -45,16 +45,7 @@
             <div class="container-fluid">
               <app-choose-align (changeMapAlignEvent)='changeMapAlign($event)'></app-choose-align>
               <hr>
-              <app-choose-map-style [map]='map'></app-choose-map-style>
-              <h4 class="font-alt pb-0 mb-0">Детайли на картата</h4><br />
-              <hr>
-              <div class="row">
-                <div class="col-sm-5">
-                  <mat-slide-toggle>Имена на дръжави</mat-slide-toggle><br>
-                  <mat-slide-toggle>Имена на градове</mat-slide-toggle><br>
-                  <mat-slide-toggle>Улици</mat-slide-toggle>
-                </div>
-              </div>
+              <app-choose-map-style [mapData]='mapData' [map]='map'></app-choose-map-style>
             </div>
           </mat-step>
           <mat-step>
@@ -69,15 +60,17 @@
     </div>
     <div class="col-sm-8 d-flex justify-content-center p-5" style="background-color: #f0eeee;">
       <div class="container-fluid h-100">
-        <div class="row row h-100 justify-content-center align-items-center">
+        <div class="row h-100 justify-content-center align-items-center">
           <div class=" border rounded w-100 px-0 mt-5" [ngClass]="{
-            'phone_view_horizontal_map col-sm-11': (align==1 && innerWidth < 550),
-            'big_screen_view_horizontal_map col-sm-11': (align==1 && innerWidth > 550),
+            'phone_view_horizontal_map col-sm-9': (align==1 && innerWidth < 550),
+            'big_screen_view_horizontal_map col-sm-9  ': (align==1 && innerWidth > 550),
             'phone_view_vertical_map col-sm-7': (align==2 && innerWidth < 550),
             'big_screen_view_vertical_map col-sm-7': (align==2 && innerWidth > 550)
           }"
             style='box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;'>
             <div id="map"></div>
+            <pre id="info"></pre>
+
           </div>
         </div>
       </div>

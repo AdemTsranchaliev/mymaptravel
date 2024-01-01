@@ -18,6 +18,7 @@ import { MapService } from './shared/map.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ChooseAlignComponent } from './create-map/choose-align/choose-align.component';
 import { ChooseMapStyleComponent } from './create-map/choose-map-style/choose-map-style.component';
+import { CatalogComponent } from './catalog/catalog.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { ChooseMapStyleComponent } from './create-map/choose-map-style/choose-ma
     ChooseViewComponent,
     ChooseAlignComponent,
     ChooseMapStyleComponent,
+    CatalogComponent,
     
   ],
   imports: [
