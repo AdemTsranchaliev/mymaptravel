@@ -3,7 +3,8 @@
     <div class="col-sm-4" style="background-color: #ffffff !important;">
       <div class="row p-4">
         <h4 class="font-alt">Настройки</h4><br />
-        <mat-stepper class="example-stepper w-100" style="max-height: 900px; min-height: 100px; overflow-y: auto;" (selectionChange)="disableMap($event)">
+        <mat-stepper class="example-stepper w-100" style="max-height: 900px; min-height: 100px; overflow-y: auto;"
+          (selectionChange)="disableMap($event)">
           [orientation]="(stepperOrientation | async)!">
           <mat-step [stepControl]="firstFormGroup" label="Избери дизайн">
             <form [formGroup]="firstFormGroup">
@@ -62,14 +63,11 @@
       <div class="container-fluid h-100">
         <div class="row h-100 justify-content-center align-items-center">
           <div class=" border rounded w-100 px-0 mt-5" [ngClass]="{
-            'phone_view_horizontal_map col-sm-9': (align==1 && innerWidth < 550),
-            'big_screen_view_horizontal_map col-sm-9  ': (align==1 && innerWidth > 550),
-            'phone_view_vertical_map col-sm-7': (align==2 && innerWidth < 550),
-            'big_screen_view_vertical_map col-sm-7': (align==2 && innerWidth > 550)
+            'horizontalDiv': (align==1 && innerWidth < 550) || (align==1 && innerWidth > 550),
+            'verticalDiv': (align==2 && innerWidth < 550) || (align==2 && innerWidth > 550)
           }"
             style='box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;'>
             <div id="map"></div>
-            <pre id="info"></pre>
 
           </div>
         </div>
@@ -98,3 +96,29 @@
       </div>
     </div>
   </div>
+
+  <style>
+    .image-container {
+        position: relative;
+        width: 500px; /* Set the width of the container */
+        height: 300px; /* Set the height of the container */
+        overflow: hidden;
+    }
+
+    .large-image {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    .small-image {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 200px; /* Set the width of the smaller image */
+        height: auto;
+        display: block;
+        z-index: 2; /* Ensure the smaller image appears on top of the larger image */
+    }
+</style>

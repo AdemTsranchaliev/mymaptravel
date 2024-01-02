@@ -36,6 +36,64 @@
     height: 80rem !important;
 }
 
+
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+    .horizontalDiv {
+        width: 400vw !important;
+        /* 100% of the viewport width */
+        height: 40vh !important;
+        /* 10% of the viewport height, adjust as needed */
+    }
+
+    /* Vertical div */
+    .verticalDiv {
+        width: 30vw !important;
+        /* 10% of the viewport width, adjust as needed */
+        height: 55vh !important;
+        ;
+        /* 100% of the viewport height */
+    }
+}
+
+/* Mobile styles - screens up to 767px */
+@media only screen and (max-width: 767px) {
+    .horizontalDiv {
+        width: 80vw !important;
+        /* 100% of the viewport width */
+        height: 22vh !important;
+        /* 10% of the viewport height, adjust as needed */
+    }
+
+    /* Vertical div */
+    .verticalDiv {
+        width: 60vw !important;
+        /* 10% of the viewport width, adjust as needed */
+        height: 35vh !important;
+        ;
+        /* 100% of the viewport height */
+    }
+}
+
+/* Desktop styles - screens 1025px and above */
+@media only screen and (min-width: 1025px) {
+    .horizontalDiv {
+        width: 50vw !important;
+        /* 100% of the viewport width */
+        height: 40vh !important;
+        /* 10% of the viewport height, adjust as needed */
+    }
+
+    /* Vertical div */
+    .verticalDiv {
+        width: 30vw !important;
+        /* 10% of the viewport width, adjust as needed */
+        height: 55vh !important;
+        ;
+        /* 100% of the viewport height */
+    }
+}
+
+
 #info {
     display: block;
     position: relative;

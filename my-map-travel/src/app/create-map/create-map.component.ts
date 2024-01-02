@@ -24,7 +24,7 @@ export class CreateMapComponent implements OnInit {
   public startSelected: any;
   public endSelected: any;
   public innerWidth: number;
-  public align: number = 1;
+  public align: number = 2;
   @HostListener('window:resize', ['$event']) onResize(event) {
     this.innerWidth = window.innerWidth;
   }
@@ -58,9 +58,7 @@ export class CreateMapComponent implements OnInit {
     this.map = this.mapService.initializeMap();
     this.innerWidth = window.innerWidth;
     this.map.on('style.load', () => {
-      document.getElementById('info').innerHTML = 'This is a title';
-
-      this.map.setFog({});
+      
       this.map.resize();
     });
   }
@@ -88,8 +86,8 @@ export class CreateMapComponent implements OnInit {
     $('#changeTab').modal('hide');
   }
 
-  disableMap(event){
-    if(event.selectedIndex == 2){
+  disableMap(event) {
+    if (event.selectedIndex == 2) {
       this.map['scrollZoom'].disable();
       this.map['boxZoom'].disable();
       this.map['dragRotate'].disable();
@@ -97,8 +95,7 @@ export class CreateMapComponent implements OnInit {
       this.map['keyboard'].disable();
       this.map['doubleClickZoom'].disable();
       this.map['touchZoomRotate'].disable();
-    }
-    else{
+    } else {
       this.map['scrollZoom'].enable();
       this.map['boxZoom'].enable();
       this.map['dragRotate'].enable();
@@ -107,9 +104,6 @@ export class CreateMapComponent implements OnInit {
       this.map['doubleClickZoom'].enable();
       this.map['touchZoomRotate'].enable();
     }
-
-
-
   }
 
   public changeType(typeId: number) {
